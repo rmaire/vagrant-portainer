@@ -1,0 +1,11 @@
+#cloud-config
+
+users:
+-   name: administrator
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, sudo, docker
+    ssh_import_id: None
+    lock_passwd: true
+    shell: /bin/bash
+    ssh_authorized_keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFd1MNnabIp6DXjcvHhooM9ownOIGUVlMpembGlK2p0/1NvGD+msJqp4jG3nuI3iBuVY5VT9ahMp6/5Wy9Cmm5hHsNtLe15VsY4BqokKC6eDqWmCIvl93lFuP4/dBUDinRjasEyDt9iEepq588Pvvrns3uV06xc9adVN7l5p5c/KjKapzbjHQrIgvolY1boROWwHjTNTLQeRUiWCsaEWdJDuQGHJGTJBczREhIG1jBmvZmiR8v/ngnVGXW5KkzbbX010JX58Sg0zo5x2lgLNKzW/ZOkQ7t+StuuiboUuKDo3IGzcSU9zaYDFbBDEPOxBClIWDI8wVB8X8y9o6iUCFH roman.maire@besonet.ch
