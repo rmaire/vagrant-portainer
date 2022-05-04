@@ -35,6 +35,7 @@ Vagrant.configure("2") do |config|
     end
 
     second.vm.provision "shell", path: "setup.sh"
+    second.vm.provision "shell", path: "setup.sh"
   end
 
   config.vm.define "third" do |third|
