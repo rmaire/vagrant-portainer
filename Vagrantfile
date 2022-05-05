@@ -18,8 +18,8 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
-    first.vm.provision "shell", path: "setup.sh"
-    first.vm.provision "shell", path: "portainer.sh"
+    first.vm.provision "shell", path: "scripts/setup.sh"
+    first.vm.provision "shell", path: "scripts/portainer.sh"
   end
 
   config.vm.define "second" do |second|
@@ -34,8 +34,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
-    second.vm.provision "shell", path: "setup.sh"
-    second.vm.provision "shell", path: "setup.sh"
+    second.vm.provision "shell", path: "scripts/setup.sh"
   end
 
   config.vm.define "third" do |third|
@@ -50,6 +49,6 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
-    third.vm.provision "shell", path: "setup.sh"
+    third.vm.provision "shell", path: "scripts/setup.sh"
   end
 end
