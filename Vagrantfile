@@ -23,8 +23,9 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
+    first.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
     first.vm.provision "shell", path: "scripts/setup.sh"
-    first.vm.provision "shell", path: "scripts/portainer.sh"
+    #first.vm.provision "shell", path: "scripts/portainer.sh"
 
   end
 
@@ -40,6 +41,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
+    second.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
     second.vm.provision "shell", path: "scripts/setup.sh"
   end
 
@@ -55,6 +57,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
+    third.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
     third.vm.provision "shell", path: "scripts/setup.sh"
   end
 
@@ -70,6 +73,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
+    fourth.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
     fourth.vm.provision "shell", path: "scripts/setup.sh"
   end
 
@@ -85,6 +89,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
+    fifth.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
     fifth.vm.provision "shell", path: "scripts/setup.sh"
   end
 
@@ -117,6 +122,6 @@ Vagrant.configure("2") do |config|
         --skip-start
     EOF
 
-    tools.vm.provision "shell", path: "scripts/cluster.sh"
+    #tools.vm.provision "shell", path: "scripts/cluster.sh"
   end
 end

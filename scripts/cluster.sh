@@ -33,22 +33,22 @@ export AGENT_1_IP=192.168.56.50
 export AGENT_2_IP=192.168.56.60
 
 consul tls ca create
-consul tls cert create -server -dc dc1 -additional-dnsname=first.mycloud.local -additional-ipaddress=10.3.5.20 -additional-dnsname=second.mycloud.local -additional-ipaddress=10.3.5.30 -additional-dnsname=third.mycloud.local -additional-ipaddress=10.3.5.40
-consul tls cert create -client -dc dc1 -additional-dnsname=fouth.mycloud.local -additional-ipaddress=10.3.5.50 -additional-dnsname=fifth.mycloud.local -additional-ipaddress=10.3.5.60
+consul tls cert create -server -dc dc1 -additional-dnsname=first.mycloud.local -additional-ipaddress=192.168.56.20 -additional-dnsname=second.mycloud.local -additional-ipaddress=10.3.5.30 -additional-dnsname=third.mycloud.local -additional-ipaddress=192.168.56.40
+consul tls cert create -client -dc dc1 -additional-dnsname=fouth.mycloud.local -additional-ipaddress=192.168.56.50 -additional-dnsname=fifth.mycloud.local -additional-ipaddress=192.168.56.60
 
 consul tls ca create -domain=nomad
-consul tls cert create -server -domain=nomad -dc=dc1 -additional-ipaddress=127.0.0.1 -additional-dnsname=first.mycloud.local -additional-ipaddress=10.3.5.20 -additional-dnsname=second.mycloud.local -additional-ipaddress=10.3.5.30 -additional-dnsname=third.mycloud.local -additional-ipaddress=10.3.5.40
-consul tls cert create -client  -domain=nomad -dc=dc1 -additional-ipaddress=127.0.0.1 -additional-dnsname=fouth.mycloud.local -additional-ipaddress=10.3.5.50 -additional-dnsname=fifth.mycloud.local -additional-ipaddress=10.3.5.60
+consul tls cert create -server -domain=nomad -dc=dc1 -additional-ipaddress=127.0.0.1 -additional-dnsname=first.mycloud.local -additional-ipaddress=192.168.56.20 -additional-dnsname=second.mycloud.local -additional-ipaddress=192.168.56.30 -additional-dnsname=third.mycloud.local -additional-ipaddress=192.168.56.40
+consul tls cert create -client  -domain=nomad -dc=dc1 -additional-ipaddress=127.0.0.1 -additional-dnsname=fouth.mycloud.local -additional-ipaddress=192.168.56.50 -additional-dnsname=fifth.mycloud.local -additional-ipaddress=192.168.56.60
 
 consul tls ca create -domain=vault
-consul tls cert create -server -domain=vault -dc=dc1 -additional-ipaddress=127.0.0.1 -additional-dnsname=first.mycloud.local -additional-ipaddress=10.3.5.20 -additional-dnsname=second.mycloud.local -additional-ipaddress=10.3.5.30 -additional-dnsname=third.mycloud.local -additional-ipaddress=10.3.5.40
+consul tls cert create -server -domain=vault -dc=dc1 -additional-ipaddress=127.0.0.1 -additional-dnsname=first.mycloud.local -additional-ipaddress=192.168.56.20 -additional-dnsname=second.mycloud.local -additional-ipaddress=192.168.56.30 -additional-dnsname=third.mycloud.local -additional-ipaddress=192.168.56.40
 
 sleep 5
 
 hashi-up consul install \
   --ssh-target-addr $SERVER_1_IP \
   --ssh-target-user vagrant \
-  --ssh-target-key ~/.ssh/insecure_private_key \
+  --ssh-target-password vagrant \
   --server \
   --connect \
   --encrypt $CONSUL_KEY \
@@ -70,7 +70,7 @@ sleep 10
 hashi-up consul install \
   --ssh-target-addr $SERVER_2_IP \
   --ssh-target-user vagrant \
-  --ssh-target-key ~/.ssh/insecure_private_key \
+  --ssh-target-password vagrant \
   --server \
   --connect \
   --encrypt $CONSUL_KEY \
@@ -92,7 +92,7 @@ sleep 10
 hashi-up consul install \
   --ssh-target-addr $SERVER_3_IP \
   --ssh-target-user vagrant \
-  --ssh-target-key ~/.ssh/insecure_private_key \
+  --ssh-target-password vagrant \
   --server \
   --connect \
   --encrypt $CONSUL_KEY \
@@ -114,7 +114,7 @@ sleep 10
 hashi-up consul install \
   --ssh-target-addr $AGENT_1_IP \
   --ssh-target-user vagrant \
-  --ssh-target-key ~/.ssh/insecure_private_key \
+  --ssh-target-password vagrant \
   --connect \
   --encrypt $CONSUL_KEY \
   --ca-file consul-agent-ca.pem \
@@ -133,7 +133,7 @@ sleep 10
 hashi-up consul install \
   --ssh-target-addr $AGENT_2_IP \
   --ssh-target-user vagrant \
-  --ssh-target-key ~/.ssh/insecure_private_key \
+  --ssh-target-password vagrant \
   --connect \
   --encrypt $CONSUL_KEY \
   --ca-file consul-agent-ca.pem \
@@ -152,7 +152,7 @@ sleep 10
 hashi-up nomad install \
   --ssh-target-addr $SERVER_1_IP \
   --ssh-target-user vagrant \
-  --ssh-target-key ~/.ssh/insecure_private_key \
+  --ssh-target-password vagrant \
   --server \
   --address $SERVER_1_IP \
   --advertise $SERVER_1_IP \
@@ -169,7 +169,7 @@ sleep 10
 hashi-up nomad install \
   --ssh-target-addr $SERVER_2_IP \
   --ssh-target-user vagrant \
-  --ssh-target-key ~/.ssh/insecure_private_key \
+  --ssh-target-password vagrant \
   --server \
   --bootstrap-expect 3 \
   --address $SERVER_2_IP \
@@ -186,7 +186,7 @@ sleep 10
 hashi-up nomad install \
   --ssh-target-addr $SERVER_3_IP \
   --ssh-target-user vagrant \
-  --ssh-target-key ~/.ssh/insecure_private_key \
+  --ssh-target-password vagrant \
   --server \
   --bootstrap-expect 3 \
   --address $SERVER_3_IP \
@@ -203,7 +203,7 @@ sleep 10
 hashi-up nomad install \
   --ssh-target-addr $AGENT_1_IP \
   --ssh-target-user vagrant \
-  --ssh-target-key ~/.ssh/insecure_private_key \
+  --ssh-target-password vagrant \
   --client \
   --encrypt $NOMAD_KEY \
   --ca-file nomad-agent-ca.pem \
@@ -217,7 +217,7 @@ sleep 10
 hashi-up nomad install \
   --ssh-target-addr $AGENT_2_IP \
   --ssh-target-user vagrant \
-  --ssh-target-key ~/.ssh/insecure_private_key \
+  --ssh-target-password vagrant \
   --client \
   --encrypt $NOMAD_KEY \
   --ca-file nomad-agent-ca.pem \
@@ -231,7 +231,7 @@ sleep 10
 hashi-up vault install \
     --ssh-target-addr $SERVER_1_IP \
     --ssh-target-user vagrant \
-    --ssh-target-key ~/.ssh/insecure_private_key \
+    --ssh-target-password vagrant \
     --cert-file dc1-server-vault-0.pem \
     --key-file dc1-server-vault-0-key.pem \
     --storage consul \
@@ -243,7 +243,7 @@ sleep 10
 hashi-up vault install \
     --ssh-target-addr $SERVER_2_IP \
     --ssh-target-user vagrant \
-    --ssh-target-key ~/.ssh/insecure_private_key \
+    --ssh-target-password vagrant \
     --cert-file dc1-server-vault-0.pem \
     --key-file dc1-server-vault-0-key.pem \
     --storage consul \
