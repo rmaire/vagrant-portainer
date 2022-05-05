@@ -25,12 +25,12 @@ echo $CONSUL_KEY > consul-gossip.key
 export CONSUL_KEY=$(cat consul-gossip.key)
 export NOMAD_KEY=$(cat nomad-gossip.key)
 
-export TOOL_IP=10.3.5.80
-export SERVER_1_IP=10.3.5.20
-export SERVER_2_IP=10.3.5.30
-export SERVER_3_IP=10.3.5.40
-export AGENT_1_IP=10.3.5.50
-export AGENT_2_IP=10.3.5.60
+export TOOL_IP=192.168.56.80
+export SERVER_1_IP=192.168.56.20
+export SERVER_2_IP=192.168.56.30
+export SERVER_3_IP=192.168.56.40
+export AGENT_1_IP=192.168.56.50
+export AGENT_2_IP=192.168.56.60
 
 consul tls ca create
 consul tls cert create -server -dc dc1 -additional-dnsname=first.mycloud.local -additional-ipaddress=10.3.5.20 -additional-dnsname=second.mycloud.local -additional-ipaddress=10.3.5.30 -additional-dnsname=third.mycloud.local -additional-ipaddress=10.3.5.40
@@ -63,7 +63,7 @@ hashi-up consul install \
   --https-only=false \
   --bootstrap-expect 3 \
   --retry-join $SERVER_1_IP --retry-join $SERVER_2_IP --retry-join $SERVER_3_IP \
-  -- version 1.10.2
+  -- version 1.12.0
 
 sleep 10
 
@@ -85,7 +85,7 @@ hashi-up consul install \
   --https-only=false \
   --bootstrap-expect 3 \
   --retry-join $SERVER_1_IP --retry-join $SERVER_2_IP --retry-join $SERVER_3_IP \
-  -- version 1.10.2
+  -- version 1.12.0
 
 sleep 10
 
@@ -107,7 +107,7 @@ hashi-up consul install \
   --https-only=false \
   --bootstrap-expect 3 \
   --retry-join $SERVER_1_IP --retry-join $SERVER_2_IP --retry-join $SERVER_3_IP \
-  -- version 1.10.2
+  -- version 1.12.0
 
 sleep 10
 
@@ -126,7 +126,7 @@ hashi-up consul install \
   --http-addr 127.0.0.1 \
   --https-only=false \
   --retry-join $SERVER_1_IP --retry-join $SERVER_2_IP --retry-join $SERVER_3_IP \
-  -- version 1.10.2
+  -- version 1.12.0
 
 sleep 10
 
@@ -145,7 +145,7 @@ hashi-up consul install \
   --http-addr 127.0.0.1 \
   --https-only=false \
   --retry-join $SERVER_1_IP --retry-join $SERVER_2_IP --retry-join $SERVER_3_IP \
-  -- version 1.10.2
+  -- version 1.12.0
 
 sleep 10
 
@@ -162,10 +162,10 @@ hashi-up nomad install \
   --key-file dc1-server-nomad-0-key.pem \
   --bootstrap-expect 3 \
   --retry-join $SERVER_1_IP --retry-join $SERVER_2_IP --retry-join $SERVER_3_IP \
-  -- version 1.1.4
+  -- version 1.2.6
 
 sleep 10
-  
+
 hashi-up nomad install \
   --ssh-target-addr $SERVER_2_IP \
   --ssh-target-user vagrant \
@@ -179,10 +179,10 @@ hashi-up nomad install \
   --cert-file dc1-server-nomad-0.pem \
   --key-file dc1-server-nomad-0-key.pem \
   --retry-join $SERVER_1_IP --retry-join $SERVER_2_IP --retry-join $SERVER_3_IP \
-  -- version 1.1.4
+  -- version 1.2.6
 
 sleep 10
-  
+
 hashi-up nomad install \
   --ssh-target-addr $SERVER_3_IP \
   --ssh-target-user vagrant \
@@ -196,7 +196,7 @@ hashi-up nomad install \
   --cert-file dc1-server-nomad-0.pem \
   --key-file dc1-server-nomad-0-key.pem \
   --retry-join $SERVER_1_IP --retry-join $SERVER_2_IP --retry-join $SERVER_3_IP \
-  -- version 1.1.4
+  -- version 1.2.6
 
 sleep 10
 
@@ -210,10 +210,10 @@ hashi-up nomad install \
   --cert-file dc1-server-nomad-0.pem \
   --key-file dc1-server-nomad-0-key.pem \
   --retry-join $SERVER_1_IP --retry-join $SERVER_2_IP --retry-join $SERVER_3_IP \
-  -- version 1.1.4
+  -- version 1.2.6
 
 sleep 10
-  
+
 hashi-up nomad install \
   --ssh-target-addr $AGENT_2_IP \
   --ssh-target-user vagrant \
@@ -224,7 +224,7 @@ hashi-up nomad install \
   --cert-file dc1-server-nomad-0.pem \
   --key-file dc1-server-nomad-0-key.pem \
   --retry-join $SERVER_1_IP --retry-join $SERVER_2_IP --retry-join $SERVER_3_IP \
-  -- version 1.1.4
+  -- version 1.2.6
 
 sleep 10
 
@@ -236,7 +236,7 @@ hashi-up vault install \
     --key-file dc1-server-vault-0-key.pem \
     --storage consul \
     --api-addr http://$SERVER_1_IP:8200 \
-    -- version 1.8.2
+    -- version 1.10.2
 
 sleep 10
 
@@ -248,4 +248,4 @@ hashi-up vault install \
     --key-file dc1-server-vault-0-key.pem \
     --storage consul \
     --api-addr http://$SERVER_2_IP:8200 \
-    -- version 1.8.2
+    -- version 1.10.2
