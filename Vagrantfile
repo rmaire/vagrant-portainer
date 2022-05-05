@@ -35,6 +35,7 @@ Vagrant.configure("2") do |config|
     end
 
     second.vm.provision "shell", path: "scripts/setup.sh"
+    config.vm.provision "shell", path: "scripts/rundeck.sh", args: ["192.168.56.30"]
   end
 
   config.vm.define "third" do |third|
