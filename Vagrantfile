@@ -18,8 +18,8 @@ Vagrant.configure("2") do |config|
 
     first.vm.provider "virtualbox" do |vb|
       vb.name = "first"
-      vb.memory = 2048
-      vb.cpus = 3
+      vb.memory = 1024
+      vb.cpus = 1
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
@@ -36,8 +36,8 @@ Vagrant.configure("2") do |config|
 
     second.vm.provider "virtualbox" do |vb|
       vb.name = "second"
-      vb.memory = 2048
-      vb.cpus = 3
+      vb.memory = 1024
+      vb.cpus = 1
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
@@ -52,8 +52,8 @@ Vagrant.configure("2") do |config|
 
     third.vm.provider "virtualbox" do |vb|
       vb.name = "third"
-      vb.memory = 2048
-      vb.cpus = 3
+      vb.memory = 1024
+      vb.cpus = 1
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
@@ -68,8 +68,8 @@ Vagrant.configure("2") do |config|
 
     fourth.vm.provider "virtualbox" do |vb|
       vb.name = "fourth"
-      vb.memory = 2048
-      vb.cpus = 3
+      vb.memory = 1024
+      vb.cpus = 1
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
@@ -84,8 +84,8 @@ Vagrant.configure("2") do |config|
 
     fifth.vm.provider "virtualbox" do |vb|
       vb.name = "fifth"
-      vb.memory = 2048
-      vb.cpus = 3
+      vb.memory = 1024
+      vb.cpus = 1
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
@@ -95,6 +95,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "tools" do |tools|
     tools.vm.box = "ubuntu/jammy64"
+    tools.vm.network :forwarded_port, host: 8080, guest: 8080
     tools.vm.network "private_network", ip: "192.168.56.80"
     tools.vm.hostname = "tools.mycloud.local"
 
@@ -122,6 +123,8 @@ Vagrant.configure("2") do |config|
         --skip-start
     EOF
 
-    #tools.vm.provision "shell", path: "scripts/cluster.sh"
+    tools.vm.provision "shell", path: "scripts/cluster.sh"
+
+    tools.vm.provision :shell, :inline => "docker run -d -p 8080:8080 -p 8081:8081 -p 80:80 -p 443:443 -v /home/vagrant/traefik/traefik.toml:/etc/traefik/traefik.toml -v /home/vagrant/ca/consul-agent-ca.pem:/etc/traefik/consul-agent-ca.pem --name traefik traefik:v2.6.6 --logLevel=DEBUG"
   end
 end

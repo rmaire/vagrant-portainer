@@ -249,3 +249,33 @@ hashi-up vault install \
     --storage consul \
     --api-addr http://$SERVER_2_IP:8200 \
     -- version 1.10.2
+
+sleep 10
+
+cat > /home/vagrant/traefik.toml <<EOLTRAEFIK
+[entryPoints]
+    [entryPoints.http]
+    address = ":8080"
+    [entryPoints.traefik]
+    address = ":8081"
+
+[api]
+    dashboard = true
+    insecure  = true
+
+# Enable Consul Catalog configuration backend.
+[providers.consulCatalog]
+    prefix           = "traefik"
+    exposedByDefault = false
+
+    [providers.consulCatalog.endpoint]
+      address = "192.168.56.20:8501"
+      scheme  = "https"
+
+        [providers.consulCatalog.endpoint.tls]
+            ca = "/etc/traefik/consul-agent-ca.pem"
+EOLTRAEFIK
+
+sleep 10
+
+docker run -d -p 8080:8080 -p 8081:8081 -p 80:80 -p 443:443 -v /home/vagrant/traefik.toml:/etc/traefik/traefik.toml -v /home/vagrant/consul-agent-ca.pem:/etc/traefik/consul-agent-ca.pem --name traefik traefik:v2.6.6 --logLevel=DEBUG

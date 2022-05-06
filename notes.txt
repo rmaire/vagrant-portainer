@@ -1,0 +1,17 @@
+[http.routers]
+  [http.routers.nomad]
+    rule = "PathPrefix(`/ui`) || PathPrefix(`/v1/client/fs/cat`) || HeadersRegexp(`referer`, `https://domain.com/ui/.*`)"
+    priority = 1999               ## important because vault uses the same /ui prefix
+    service = "nomad"
+    [http.routers.nomad.tls]
+
+  [http.routers.consul]
+    rule = "PathPrefix(`/consul`) || HeadersRegexp(`referer`, `https://domain.com/consul/.*`)"
+    service = "consul"
+    [http.routers.consul.tls]
+
+  [http.routers.vault]
+    rule = "PathPrefix(`/ui/vault`) || HeadersRegexp(`referer`, `https://domain.com/ui/vault.*`)"
+    priority = 2000
+    service = "vault"
+    [http.routers.vault.tls]
