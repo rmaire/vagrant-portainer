@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
 
     first.vm.provider "virtualbox" do |vb|
       vb.name = "first"
-      vb.memory = 1024
+      vb.memory = 2048
       vb.cpus = 1
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
@@ -106,25 +106,7 @@ Vagrant.configure("2") do |config|
     end
 
     tools.vm.provision "shell", path: "scripts/setup.sh"
+    #tools.vm.provision "shell", path: "scripts/cluster.sh"
 
-    tools.vm.provision "shell", inline: <<-EOF
-      cp /vagrant/keys/insecure_private_key /home/vagrant/.ssh/
-      chmod 700 /home/vagrant/.ssh/insecure_private_key
-
-      hashi-up consul install \
-        --local \
-        --skip-enable \
-        --skip-start \
-        --client-addr 0.0.0.0
-
-      hashi-up nomad install \
-        --local \
-        --skip-enable \
-        --skip-start
-    EOF
-
-    tools.vm.provision "shell", path: "scripts/cluster.sh"
-
-    tools.vm.provision :shell, :inline => "docker run -d -p 8080:8080 -p 8081:8081 -p 80:80 -p 443:443 -v /home/vagrant/traefik/traefik.toml:/etc/traefik/traefik.toml -v /home/vagrant/ca/consul-agent-ca.pem:/etc/traefik/consul-agent-ca.pem --name traefik traefik:v2.6.6 --logLevel=DEBUG"
   end
 end
