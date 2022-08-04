@@ -1,6 +1,11 @@
 # install hostmanager plugin ad administrator/root:
 # vagrant plugin install vagrant-hostmanager
 
+# https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
+# ansible-playbook -i /vagrant/inventory/sample/inventory.ini --become --become-user=root /vagrant/cluster.yml -u vagrant -k
+# export KUBECONFIG=$PWD/kubespray-test.conf
+# curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
 Vagrant.configure("2") do |config|
 
   config.ssh.insert_key = false
@@ -11,102 +16,101 @@ Vagrant.configure("2") do |config|
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = true
 
-  config.vm.define "first" do |first|
-    first.vm.box = "ubuntu/jammy64"
-    first.vm.network "private_network", ip: "192.168.56.20"
-    first.vm.hostname = "first.mycloud.local"
+  config.vm.define "firstk8s" do |firstk8s|
+    firstk8s.vm.box = "ubuntu/focal64"
+    firstk8s.vm.network "private_network", ip: "192.168.56.20"
+    firstk8s.vm.hostname = "firstk8s.mycloud.local"
 
-    first.vm.provider "virtualbox" do |vb|
-      vb.name = "first"
+    firstk8s.vm.provider "virtualbox" do |vb|
+      vb.name = "firstk8s"
       vb.memory = 2048
-      vb.cpus = 1
+      vb.cpus = 2
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
-    first.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
-    first.vm.provision "shell", path: "scripts/setup.sh"
+    firstk8s.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
+    firstk8s.vm.provision "shell", path: "scripts/setup.sh"
     #first.vm.provision "shell", path: "scripts/portainer.sh"
 
   end
 
-  config.vm.define "second" do |second|
-    second.vm.box = "ubuntu/jammy64"
-    second.vm.network "private_network", ip: "192.168.56.30"
-    second.vm.hostname = "second.mycloud.local"
+  config.vm.define "secondk8s" do |secondk8s|
+    secondk8s.vm.box = "ubuntu/focal64"
+    secondk8s.vm.network "private_network", ip: "192.168.56.30"
+    secondk8s.vm.hostname = "secondk8s.mycloud.local"
 
-    second.vm.provider "virtualbox" do |vb|
-      vb.name = "second"
-      vb.memory = 1024
-      vb.cpus = 1
+    secondk8s.vm.provider "virtualbox" do |vb|
+      vb.name = "secondk8s"
+      vb.memory = 2048
+      vb.cpus = 2
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
-    second.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
-    second.vm.provision "shell", path: "scripts/setup.sh"
+    secondk8s.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
+    secondk8s.vm.provision "shell", path: "scripts/setup.sh"
   end
 
-  config.vm.define "third" do |third|
-    third.vm.box = "ubuntu/jammy64"
-    third.vm.network "private_network", ip: "192.168.56.40"
-    third.vm.hostname = "third.mycloud.local"
+  config.vm.define "thirdk8s" do |thirdk8s|
+    thirdk8s.vm.box = "ubuntu/focal64"
+    thirdk8s.vm.network "private_network", ip: "192.168.56.40"
+    thirdk8s.vm.hostname = "thirdk8s.mycloud.local"
 
-    third.vm.provider "virtualbox" do |vb|
-      vb.name = "third"
-      vb.memory = 1024
-      vb.cpus = 1
+    thirdk8s.vm.provider "virtualbox" do |vb|
+      vb.name = "thirdk8s"
+      vb.memory = 2048
+      vb.cpus = 2
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
-    third.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
-    third.vm.provision "shell", path: "scripts/setup.sh"
+    thirdk8s.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
+    thirdk8s.vm.provision "shell", path: "scripts/setup.sh"
   end
 
-  config.vm.define "fourth" do |fourth|
-    fourth.vm.box = "ubuntu/jammy64"
-    fourth.vm.network "private_network", ip: "192.168.56.50"
-    fourth.vm.hostname = "fourth.mycloud.local"
+  config.vm.define "fourthk8s" do |fourthk8s|
+    fourthk8s.vm.box = "ubuntu/focal64"
+    fourthk8s.vm.network "private_network", ip: "192.168.56.50"
+    fourthk8s.vm.hostname = "fourthk8s.mycloud.local"
 
-    fourth.vm.provider "virtualbox" do |vb|
-      vb.name = "fourth"
-      vb.memory = 1024
-      vb.cpus = 1
+    fourthk8s.vm.provider "virtualbox" do |vb|
+      vb.name = "fourthk8s"
+      vb.memory = 2048
+      vb.cpus = 2
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
-    fourth.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
-    fourth.vm.provision "shell", path: "scripts/setup.sh"
+    fourthk8s.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
+    fourthk8s.vm.provision "shell", path: "scripts/setup.sh"
   end
 
-  config.vm.define "fifth" do |fifth|
-    fifth.vm.box = "ubuntu/jammy64"
-    fifth.vm.network "private_network", ip: "192.168.56.60"
-    fifth.vm.hostname = "fifth.mycloud.local"
+  config.vm.define "fifthk8s" do |fifthk8s|
+    fifthk8s.vm.box = "ubuntu/focal64"
+    fifthk8s.vm.network "private_network", ip: "192.168.56.60"
+    fifthk8s.vm.hostname = "fifthk8s.mycloud.local"
 
-    fifth.vm.provider "virtualbox" do |vb|
-      vb.name = "fifth"
-      vb.memory = 1024
-      vb.cpus = 1
+    fifthk8s.vm.provider "virtualbox" do |vb|
+      vb.name = "fifthk8s"
+      vb.memory = 2048
+      vb.cpus = 2
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
-    fifth.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
-    fifth.vm.provision "shell", path: "scripts/setup.sh"
+    fifthk8s.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
+    fifthk8s.vm.provision "shell", path: "scripts/setup.sh"
   end
 
-  config.vm.define "tools" do |tools|
-    tools.vm.box = "ubuntu/jammy64"
-    tools.vm.network :forwarded_port, host: 8080, guest: 8080
-    tools.vm.network "private_network", ip: "192.168.56.80"
-    tools.vm.hostname = "tools.mycloud.local"
+  config.vm.define "toolsk8s" do |toolsk8s|
+    toolsk8s.vm.box = "ubuntu/focal64"
+    toolsk8s.vm.network "private_network", ip: "192.168.56.80"
+    toolsk8s.vm.hostname = "toolsk8s.mycloud.local"
 
-    tools.vm.provider "virtualbox" do |vb|
-      vb.name = "tools"
+    toolsk8s.vm.provider "virtualbox" do |vb|
+      vb.name = "toolsk8s"
       vb.memory = 1024
       vb.cpus = 1
     end
 
-    tools.vm.provision "shell", path: "scripts/setup.sh"
-    #tools.vm.provision "shell", path: "scripts/cluster.sh"
+    toolsk8s.vm.provision "shell", path: "scripts/setup.sh"
+    toolsk8s.vm.provision "shell", path: "scripts/tools.sh"
 
   end
 end
